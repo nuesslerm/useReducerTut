@@ -4,7 +4,7 @@ import { login } from './utils';
 
 function loginReducer(state, action) {
   switch (action.type) {
-    case 'login':
+    case 'tryLogin':
       return {
         ...state,
         isLoading: true,
@@ -58,7 +58,7 @@ export default function LoginPlain() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch({ type: 'login' });
+    dispatch({ type: 'tryLogin' });
 
     try {
       await login({ username, password });
