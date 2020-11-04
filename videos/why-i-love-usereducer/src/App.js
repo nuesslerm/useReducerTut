@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import LoginPlain from './LoginPlain';
 import LoginUseState from './LoginUseState';
 import LoginUseReducer from './LoginUseReducer';
 import LoginUseReducerImmer from './LoginUseReducerImmer';
@@ -30,6 +31,7 @@ function useSimpleHashRouter(routes) {
 
 function App() {
   const CurrentRoute = useSimpleHashRouter({
+    loginPlain: LoginPlain,
     useState: LoginUseState,
     useReducer: LoginUseReducer,
     useReducerImmer: LoginUseReducerImmer,
@@ -39,20 +41,23 @@ function App() {
   return (
     <>
       {!CurrentRoute && (
-        <div className='App App-Column'>
-          <a href='#useState'>useState</a>
+        <div className="App App-Column">
+          <a href="#loginPlain">loginPlain</a>
           <br />
           <br />
-          <a href='#useReducer'>useReducer</a>
+          <a href="#useState">useState</a>
           <br />
           <br />
-          <a href='#useReducerImmer'>useReducerImmer</a>
+          <a href="#useReducer">useReducer</a>
           <br />
           <br />
-          <a href='#withContext'>LoginWithContext</a>
+          <a href="#useReducerImmer">useReducerImmer</a>
           <br />
           <br />
-          <a href='#useReducerTypeScript'>LoginUseReducerTypeScript</a>
+          <a href="#withContext">LoginWithContext</a>
+          <br />
+          <br />
+          <a href="#useReducerTypeScript">LoginUseReducerTypeScript</a>
         </div>
       )}
       {CurrentRoute && <CurrentRoute />}
