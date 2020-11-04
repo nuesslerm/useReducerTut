@@ -1,44 +1,46 @@
 import React, { useReducer } from 'react';
-// login stubs an API call
 import { login } from './utils';
 
 function loginReducer(state, action) {
   switch (action.type) {
-    case 'login':
+    case 'field': {
       return {
         ...state,
-        isLoading: true,
-        error: '',
+        [action.fieldName]: action.payload,
       };
-    case 'success':
+    }
+    case 'login': {
+      return {
+        ...state,
+        error: '',
+        isLoading: true,
+      };
+    }
+    case 'success': {
       return {
         ...state,
         isLoggedIn: true,
         isLoading: false,
-        error: '',
       };
-    case 'error':
+    }
+    case 'error': {
       return {
         ...state,
         error: 'Incorrect username or password!',
+        isLoggedIn: false,
         isLoading: false,
         username: '',
         password: '',
       };
-    case 'logout':
+    }
+    case 'logOut': {
       return {
         ...state,
         isLoggedIn: false,
-        username: '',
-        password: '',
       };
-    case 'updateField':
-      return {
-        ...state,
-        [action.fieldName]: action.value,
-      };
+    }
     default:
-      throw new Error('Unknown action type');
+      return state;
   }
 }
 
@@ -50,9 +52,8 @@ const initialState = {
   isLoggedIn: false,
 };
 
-export default function LoginPlain() {
+export default function LoginUseReducer() {
   const [state, dispatch] = useReducer(loginReducer, initialState);
-
   const { username, password, isLoading, error, isLoggedIn } = state;
 
   const onSubmit = async (e) => {
@@ -63,56 +64,51 @@ export default function LoginPlain() {
     try {
       await login({ username, password });
       dispatch({ type: 'success' });
-    } catch (err) {
+    } catch (error) {
       dispatch({ type: 'error' });
     }
-    console.log(username, password);
   };
 
   return (
-    <div className="App">
-      <div className="login-container">
+    <div className='App'>
+      <div className='login-container'>
         {isLoggedIn ? (
-          <div>
-            <h1>Hello {username}!</h1>
-            <button
-              onClick={() => {
-                dispatch({ type: 'logout' });
-              }}
-            >
+          <>
+            <h1>Welcome {username}!</h1>
+            <button onClick={() => dispatch({ type: 'logOut' })}>
               Log Out
             </button>
-          </div>
+          </>
         ) : (
-          <form className="form" onSubmit={onSubmit}>
-            {error && <p className="error">{error}</p>}
+          <form className='form' onSubmit={onSubmit}>
+            {error && <p className='error'>{error}</p>}
             <p>Please Login!</p>
             <input
-              type="text"
-              placeholder="username"
+              type='text'
+              placeholder='username'
               value={username}
               onChange={(e) =>
                 dispatch({
-                  type: 'updateField',
+                  type: 'field',
                   fieldName: 'username',
-                  value: e.currentTarget.value,
+                  payload: e.currentTarget.value,
                 })
               }
             />
             <input
-              type="password"
-              placeholder="password"
-              autoComplete="new-password"
+              type='password'
+              placeholder='password'
+              autoComplete='new-password'
               value={password}
               onChange={(e) =>
                 dispatch({
-                  type: 'updateField',
+                  type: 'field',
                   fieldName: 'password',
-                  value: e.currentTarget.value,
+                  payload: e.currentTarget.value,
                 })
               }
             />
-            <button className="submit" type="submit" disabled={isLoading}>
+            <button className='submit' type='submit' disabled={isLoading}>
               {isLoading ? 'Logging in...' : 'Log In'}
             </button>
           </form>
